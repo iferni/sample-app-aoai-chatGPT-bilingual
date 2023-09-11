@@ -69,9 +69,9 @@ const Chat = () => {
 
     useEffect(() => {
         if(appStateContext?.state.isCosmosDBAvailable?.status === CosmosDBStatus.NotWorking && appStateContext.state.chatHistoryLoadingState === ChatHistoryLoadingState.Fail && hideErrorDialog){
-            let subtitle = `${appStateContext.state.isCosmosDBAvailable.status}. Please contact the site administrator.`
+            let subtitle = `${appStateContext.state.isCosmosDBAvailable.status}. Please contact the site administrator. S.V.P. aviser l'administrateur du site. `
             setErrorMsg({
-                title: "Chat history is not enabled",
+                title: "Chat history is not enabled | L'historique du clavardage n'est pas disponible.",
                 subtitle: subtitle
             })
             toggleErrorDialog();
@@ -119,7 +119,7 @@ const Chat = () => {
         }else{
             conversation = appStateContext?.state?.currentChat
             if(!conversation){
-                console.error("Conversation not found.");
+                console.error("Conversation not found | La conversation n'est pas disponible");
                 setIsLoading(false);
                 setShowLoadingMessage(false);
                 abortFuncs.current = abortFuncs.current.filter(a => a !== abortController);
@@ -173,7 +173,7 @@ const Chat = () => {
             
         } catch ( e )  {
             if (!abortController.signal.aborted) {
-                let errorMessage = "An error occurred. Please try again. If the problem persists, please contact the site administrator.";
+                let errorMessage = "An error occurred. Please try again. If the problem persists, please contact the site administrator  | Une erreur s'est produit. Veuillez re-essayer. Si le problème se poursuit, aviser l'administrateur ";
                 if (result.error?.message) {
                     errorMessage = result.error.message;
                 }
@@ -221,7 +221,7 @@ const Chat = () => {
         if(conversationId){
             conversation = appStateContext?.state?.chatHistory?.find((conv) => conv.id === conversationId)
             if(!conversation){
-                console.error("Conversation not found.");
+                console.error("Conversation not found. | La conversation n'est pas disponible.");
                 setIsLoading(false);
                 setShowLoadingMessage(false);
                 abortFuncs.current = abortFuncs.current.filter(a => a !== abortController);
@@ -245,14 +245,14 @@ const Chat = () => {
                 let errorChatMsg: ChatMessage = {
                     id: uuid(),
                     role: "error",
-                    content: "There was an error generating a response. Chat history can't be saved at this time. If the problem persists, please contact the site administrator.",
+                    content: "There was an error generating a response. Chat history can't be saved at this time. If the problem persists, please contact the site administrator. | La réponse n'est pas disponible.  Le clavardage ne peut être sauvegardé.  Si le problème persiste, veuillez aviser l'administrateur.",
                     date: new Date().toISOString()
                 }
                 let resultConversation;
                 if(conversationId){
                     resultConversation = appStateContext?.state?.chatHistory?.find((conv) => conv.id === conversationId)
                     if(!resultConversation){
-                        console.error("Conversation not found.");
+                        console.error("Conversation not found. | La conversation n'est pas disponible.");
                         setIsLoading(false);
                         setShowLoadingMessage(false);
                         abortFuncs.current = abortFuncs.current.filter(a => a !== abortController);
@@ -305,7 +305,7 @@ const Chat = () => {
                 if(conversationId){
                     resultConversation = appStateContext?.state?.chatHistory?.find((conv) => conv.id === conversationId)
                     if(!resultConversation){
-                        console.error("Conversation not found.");
+                        console.error("Conversation not found. | La conversation n'est pas disponible.");
                         setIsLoading(false);
                         setShowLoadingMessage(false);
                         abortFuncs.current = abortFuncs.current.filter(a => a !== abortController);
@@ -333,7 +333,7 @@ const Chat = () => {
             
         } catch ( e )  {
             if (!abortController.signal.aborted) {
-                let errorMessage = "An error occurred. Please try again. If the problem persists, please contact the site administrator.";
+                let errorMessage = "An error occurred. Please try again. If the problem persists, please contact the site administrator. | Une erreur s'est produit. Veuillez re-essayer. Si le problème se poursuit, aviser l'administrateur";
                 if (result.error?.message) {
                     errorMessage = result.error.message;
                 }
@@ -350,7 +350,7 @@ const Chat = () => {
                 if(conversationId){
                     resultConversation = appStateContext?.state?.chatHistory?.find((conv) => conv.id === conversationId)
                     if(!resultConversation){
-                        console.error("Conversation not found.");
+                        console.error("Conversation not found. | La conversation n'est pas disponible.");
                         setIsLoading(false);
                         setShowLoadingMessage(false);
                         abortFuncs.current = abortFuncs.current.filter(a => a !== abortController);
@@ -359,7 +359,7 @@ const Chat = () => {
                     resultConversation.messages.push(errorChatMsg);
                 }else{
                     if(!result.history_metadata){
-                        console.error("Error retrieving data.", result);
+                        console.error("Error retrieving data. | Erreur de récuperation des données.", result);
                         setIsLoading(false);
                         setShowLoadingMessage(false);
                         abortFuncs.current = abortFuncs.current.filter(a => a !== abortController);
@@ -400,8 +400,8 @@ const Chat = () => {
             let response = await historyClear(appStateContext?.state.currentChat.id)
             if(!response.ok){
                 setErrorMsg({
-                    title: "Error clearing current chat",
-                    subtitle: "Please try again. If the problem persists, please contact the site administrator.",
+                    title: "Error clearing current chat | Erreur d'effacement du clavardage",
+                    subtitle: "Please try again. If the problem persists, please contact the site administrator. | Veuillez re-essayer. Si le problème se poursuit, aviser l'administrateur",
                 })
                 toggleErrorDialog();
             }else{
@@ -448,13 +448,13 @@ const Chat = () => {
         if (appStateContext && appStateContext.state.currentChat && processMessages === messageStatus.Done) {
                 if(appStateContext.state.isCosmosDBAvailable.cosmosDB){
                     if(!appStateContext?.state.currentChat?.messages){
-                        console.error("Failure fetching current chat state.")
+                        console.error("Failure fetching current chat state | Erreur de récuperation de l'état du clavardage")
                         return 
                     }
                     saveToDB(appStateContext.state.currentChat.messages, appStateContext.state.currentChat.id)
                     .then((res) => {
                         if(!res.ok){
-                            let errorMessage = "An error occurred. Answers can't be saved at this time. If the problem persists, please contact the site administrator.";
+                            let errorMessage = "An error occurred. Answers can't be saved at this time. If the problem persists, please contact the site administrator. | Une erreur s'est produit. Les réponses ne peuvent être sauvegardées.  Si le problème persiste, veuillez aviser l'administrateur.";
                             let errorChatMsg: ChatMessage = {
                                 id: uuid(),
                                 role: "error",
@@ -464,7 +464,7 @@ const Chat = () => {
                             if(!appStateContext?.state.currentChat?.messages){
                                 let err: Error = {
                                     ...new Error,
-                                    message: "Failure fetching current chat state."
+                                    message: "Failure fetching current chat state | Erreur de récuperation de l'état du clavardage"
                                 }
                                 throw err
                             }
@@ -544,8 +544,8 @@ const Chat = () => {
                                     className={styles.chatIcon}
                                     aria-hidden="true"
                                 />
-                                <h1 className={styles.chatEmptyStateTitle}>Start chatting</h1>
-                                <h2 className={styles.chatEmptyStateSubtitle}>This chatbot is configured to answer your questions</h2>
+                                <h1 className={styles.chatEmptyStateTitle}>Start chatting | Démarrer le clavardage</h1>
+                                <h2 className={styles.chatEmptyStateSubtitle}>This chatbot is configured to answer your questions | Ce système de clavardage est configuré pour répondre à vos questions </h2>
                             </Stack>
                         ) : (
                             <div className={styles.chatMessageStream} style={{ marginBottom: isLoading ? "40px" : "0px"}} role="log">
@@ -579,7 +579,7 @@ const Chat = () => {
                                         <div className={styles.chatMessageGpt}>
                                             <Answer
                                                 answer={{
-                                                    answer: "Generating answer...",
+                                                    answer: "Generating answer... | Réponse en préparation",
                                                     citations: []
                                                 }}
                                                 onCitationClicked={() => null}
