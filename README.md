@@ -1,5 +1,7 @@
 # [Preview] Sample Chat App with AOAI
 
+This repo is a fork of the Microsoft Azure OpenAI sample app.  The frontend component has been crudely modified to show English and French messages to the users.  Backend API responses render in English only.
+
 This repo contains sample code for a simple chat webapp that integrates with Azure OpenAI. Note: some portions of the app use preview APIs.
 
 ## Prerequisites
